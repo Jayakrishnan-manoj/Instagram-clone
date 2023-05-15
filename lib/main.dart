@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/responsive/mobilescreen_layout.dart';
 import 'package:instagram_clone/responsive/responsive_screen.dart';
@@ -5,6 +6,8 @@ import 'package:instagram_clone/responsive/webscreen_layout.dart';
 import 'package:instagram_clone/utils/colors.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
   runApp(const MyApp());
 }
 
