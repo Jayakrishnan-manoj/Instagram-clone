@@ -7,6 +7,9 @@ import 'package:instagram_clone/screens/login_screen.dart';
 import 'package:instagram_clone/services/auth_service.dart';
 import 'package:instagram_clone/utils/utils.dart';
 
+import '../responsive/mobilescreen_layout.dart';
+import '../responsive/responsive_screen.dart';
+import '../responsive/webscreen_layout.dart';
 import '../utils/colors.dart';
 import '../widgets/text_field_input.dart';
 
@@ -57,6 +60,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
     });
     if (res != 'success') {
       showSnackBar(context, res);
+    } else {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const ResponsiveLayout(
+            webScreenLayout: WebScreenLayout(),
+            mobileScreenLayout: MobileScreenLayout(),
+          ),
+        ),
+      );
     }
   }
 
