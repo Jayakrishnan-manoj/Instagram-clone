@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import '../models/user.dart' as model;
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/services/storage_service.dart';
 
@@ -27,15 +28,19 @@ class AuthService {
         String photoUrl = await StorageService()
             .uploadImageToStorage('profilePics', file, false);
 
-        await _firestore.collection('users').doc(cred.user!.uid).set({
-          'username': username,
-          'uid': cred.user!.uid,
-          'email': email,
-          'bio': bio,
-          'followers': [],
-          'following': [],
-          'photoUrl': photoUrl,
-        });
+        model.User user = model.User(
+          email: email,
+          uid: cred.user!.uid,
+          photoUrl: photoUrl,
+          username: username,
+          bio: bio,
+          followers: [],
+          following: [],
+        );
+
+        await _firestore.collection('users').doc(cred.user!.uid).set(
+              user.toJSON(),
+            );
         res = "success";
       }
     } catch (e) {
@@ -56,7 +61,7 @@ class AuthService {
           password: password,
         );
         res = 'success';
-      }else{
+      } else {
         res = "please enter all fields";
       }
     } catch (e) {
