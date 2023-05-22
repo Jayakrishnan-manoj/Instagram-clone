@@ -22,7 +22,7 @@ class FireStoreService {
         uid: uid,
         username: username,
         postId: postId,
-        datePosted: DateTime.now().toIso8601String(),
+        datePosted: DateTime.now().toString(),
         postUrl: photoUrl,
         profilePic: profilePic,
         likes: [],
@@ -36,5 +36,25 @@ class FireStoreService {
       res = e.toString();
     }
     return res;
+  }
+
+  Future<void> likePost(String postId, String uid, List likes) async {
+    try {
+      if (likes.contains(uid)) {
+        await _store.collection('posts').doc(postId).update(
+          {
+            'likes': FieldValue.arrayRemove([uid]),
+          },
+        );
+      } else {
+        await _store.collection('posts').doc(postId).update(
+          {
+            'likes': FieldValue.arrayUnion([uid])
+          },
+        );
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }
