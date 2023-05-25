@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:instagram_clone/models/post.dart';
 import 'package:instagram_clone/services/storage_service.dart';
+import 'package:instagram_clone/utils/utils.dart';
 import 'package:uuid/uuid.dart';
 
 class FireStoreService {
@@ -53,6 +54,39 @@ class FireStoreService {
           },
         );
       }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> postComment(String postId, String text, String uid, String name,
+      String profilePic) async {
+    try {
+      if (text.isNotEmpty) {
+        String commentId = const Uuid().v1();
+        await _store
+            .collection('posts')
+            .doc(postId)
+            .collection('comments')
+            .doc(commentId)
+            .set({
+          'profilePic': profilePic,
+          'name': name,
+          'uid': uid,
+          'text': text,
+          'postId': postId,
+          'commentId': commentId,
+          'datePosted': DateTime.now().toString(),
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> deletePost(String postId) async {
+    try {
+      await _store.collection('posts').doc(postId).delete();
     } catch (e) {
       print(e.toString());
     }
